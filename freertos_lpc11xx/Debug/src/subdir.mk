@@ -8,21 +8,24 @@ C_SRCS += \
 ../src/debug.c \
 ../src/joystick.c \
 ../src/lcd.c \
-../src/main.c 
+../src/main.c \
+../src/uart.c 
 
 OBJS += \
 ./src/cr_startup_lpc11.o \
 ./src/debug.o \
 ./src/joystick.o \
 ./src/lcd.o \
-./src/main.o 
+./src/main.o \
+./src/uart.o 
 
 C_DEPS += \
 ./src/cr_startup_lpc11.d \
 ./src/debug.d \
 ./src/joystick.d \
 ./src/lcd.d \
-./src/main.d 
+./src/main.d \
+./src/uart.d 
 
 
 # Each subdirectory must supply rules for building sources it contributes

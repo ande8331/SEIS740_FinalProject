@@ -8,9 +8,11 @@
 #include "task.h"
 #include "semphr.h"
 
+
 /* Header file include for LPC1114 */
 #include "LPC11xx.h"
 #include "lcd.h"
+#include "uart.h"
 
 /* Demo includes. */
 #include "debug.h"
@@ -18,6 +20,9 @@
 char displayLine1[16];
 char displayLine2[16];
 
+
+extern volatile uint8_t  UARTBuffer[];
+extern volatile uint32_t UARTCount;
 /* Declare a variable of type xSemaphoreHandle.  This is used to reference the
 semaphore that is used to synchronize a task with an interrupt. */
 //--------- Lab edit begin ---------
@@ -65,25 +70,28 @@ void vTaskDebuggerHeartbeat(void *pvParameters)
  void vTaskLcdDisplay(void *pvParameters)
 {
 	int i=0;
-
+	int disp2Counter = 0;
+	UARTInit(115200);
 	while(1)
 	{
-        //if ((i & 0x01) == 0) {
-		//   lcd_putstring(0, "  UST SEIS 740  ");
-		//   lcd_putstring(1, "----------------");
-        //}
-        //else {
-        //	lcd_putstring(0, "++++++++++++++++");
-        //	lcd_putstring(1, "  UST SEIS 740  ");
-        //}
-
 		itoa(i, displayLine1, 10);
+
+
+		int i = 0;
+		for (i = 0; i < UARTCount; i++)
+		{
+			displayLine2[disp2Counter++%16] = UARTBuffer[i];
+		}
+		UARTCount = 0;
 
 		lcd_putstring(0, displayLine1);
 		lcd_putstring(1, displayLine2);
 
+		//UARTSend(displayLine1, 16);
+
+
         i++;
-        vTaskDelay(configTICK_RATE_HZ * 2);
+        vTaskDelay(configTICK_RATE_HZ * 1);
 	}
 }
 
