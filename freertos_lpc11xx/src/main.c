@@ -15,6 +15,9 @@
 /* Demo includes. */
 #include "debug.h"
 
+char displayLine1[16];
+char displayLine2[16];
+
 /* Declare a variable of type xSemaphoreHandle.  This is used to reference the
 semaphore that is used to synchronize a task with an interrupt. */
 //--------- Lab edit begin ---------
@@ -63,24 +66,24 @@ void vTaskDebuggerHeartbeat(void *pvParameters)
 {
 	int i=0;
 
-//--------- Lab edit begin ---------
-	xSemaphoreTake(ButtonSemaphore, 0);
-
 	while(1)
 	{
-//--------- Lab edit begin ---------
-		xSemaphoreTake(ButtonSemaphore, portMAX_DELAY);
+        //if ((i & 0x01) == 0) {
+		//   lcd_putstring(0, "  UST SEIS 740  ");
+		//   lcd_putstring(1, "----------------");
+        //}
+        //else {
+        //	lcd_putstring(0, "++++++++++++++++");
+        //	lcd_putstring(1, "  UST SEIS 740  ");
+        //}
 
-        if ((i & 0x01) == 0) {
-		   lcd_putstring(0, "  UST SEIS 740  ");
-		   lcd_putstring(1, "----------------");
-        }
-        else {
-        	lcd_putstring(0, "++++++++++++++++");
-        	lcd_putstring(1, "  UST SEIS 740  ");
-        }
+		itoa(i, displayLine1, 10);
+
+		lcd_putstring(0, displayLine1);
+		lcd_putstring(1, displayLine2);
 
         i++;
+        vTaskDelay(configTICK_RATE_HZ * 2);
 	}
 }
 
